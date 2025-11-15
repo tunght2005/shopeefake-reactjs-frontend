@@ -1,21 +1,15 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import type { RegisterOptions } from 'react-hook-form'
-import { getRules } from '../../utils/rules'
-
-interface LoginData {
-  email: string
-  password: string
-}
+import { zodResolver } from '@hookform/resolvers/zod'
+import { type LoginSchema, loginSchema } from '../../utils/rules'
 
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<LoginData>() // return register, handleSubmit, formState: {errors}
-  const rules = getRules()
+  } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) }) // return register, handleSubmit, formState: {errors}
   const onSubmit = handleSubmit((data) => {
     {
       console.log(data)
@@ -33,7 +27,7 @@ export default function Login() {
                   type='email'
                   className='mt-8 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Email'
-                  {...register('email', rules.email as RegisterOptions<LoginData, 'email'>)}
+                  {...register('email')}
                 />
                 <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.email?.message}</div>
                 <input
@@ -41,7 +35,7 @@ export default function Login() {
                   className='mt-2 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Password'
                   autoComplete='on'
-                  {...register('password', rules.password as RegisterOptions<LoginData, 'password'>)}
+                  {...register('password')}
                 />
                 <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.password?.message}</div>
                 <div className='mt-3'>

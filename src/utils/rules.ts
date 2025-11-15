@@ -1,56 +1,31 @@
-import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
+import { z } from 'zod'
 
-type Rules = { [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions }
-export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
-  email: {
-    required: {
-      value: true,
-      message: 'Email là bắt buộc phải điền'
-    },
-    pattern: {
-      value:
-        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-      message: 'Email không đúng định dạng'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài phải từ 5 - 160 ký tự'
-    },
-    minLength: {
-      value: 5,
-      message: 'Độ dài tối thiểu phải 5 - 160 ký tự'
-    }
-  },
-  password: {
-    required: {
-      value: true,
-      message: 'Password là bắt buộc phải điền'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài phải từ 6 - 160 ký tự'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài tối thiểu phải 6 - 160 ký tự'
-    }
-  },
-  confirm_password: {
-    required: {
-      value: true,
-      message: 'Nhập lại password'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài phải từ 6 - 160 ký tự'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài tối thiểu phải 6 - 160 ký tự'
-    },
-    validate:
-      typeof getValues === 'function'
-        ? (value) => value === getValues('password') || 'Nhập lại password không đúng'
-        : undefined
-  }
+export const schema = z
+  .object({
+    email: z
+      .string()
+      .nonempty('Nhập email là bắt buộc')
+      .email('email không hợp lệ')
+      .min(5, 'Độ dài tối thiểu phải 5 - 160 ký tự')
+      .max(160, 'Độ dài tối thiểu phải 5 - 160 ký tự'),
+    password: z
+      .string()
+      .nonempty('Nhập password là bắt buộc')
+      .min(6, 'Độ dài tối thiểu phải 6 - 160 ký tự')
+      .max(160, 'Độ dài tối thiểu phải 6 - 160 ký tự'),
+    confirm_password: z
+      .string()
+      .nonempty('Vui lòng nhập confirm password')
+      .min(6, 'Độ dài tối thiểu phải 6 - 160 ký tự')
+      .max(160, 'Độ dài tối thiểu phải 6 - 160 ký tự')
+  })
+  .refine((data) => data.confirm_password === data.password, {
+    message: 'Confirm không khớp',
+    path: ['confirm_password']
+  })
+
+export const loginSchema = schema.omit({
+  confirm_password: true
 })
+export type LoginSchema = z.infer<typeof loginSchema>
+export type Schema = z.infer<typeof schema>
