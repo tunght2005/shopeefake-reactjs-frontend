@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type LoginSchema, loginSchema } from '../../utils/rules'
+import Input from '../../components/Input'
 
 export default function Login() {
   const {
@@ -22,22 +23,24 @@ export default function Login() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit} noValidate>
               <div className='text-xl'>Đăng Nhập</div>
-              <div className='mt-8'>
-                <input
+              <div>
+                <Input
                   type='email'
                   className='mt-8 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Email'
-                  {...register('email')}
+                  name='email'
+                  register={register}
+                  errorMessage={errors.email?.message}
                 />
-                <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.email?.message}</div>
-                <input
+                <Input
                   type='password'
                   className='mt-2 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Password'
+                  name='password'
+                  register={register}
+                  errorMessage={errors.password?.message}
                   autoComplete='on'
-                  {...register('password')}
                 />
-                <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.password?.message}</div>
                 <div className='mt-3'>
                   <button
                     type='submit'

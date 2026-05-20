@@ -1,8 +1,8 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { schema, type Schema } from '../../utils/rules'
+import Input from '../../components/Input'
 
 export default function Register() {
   const {
@@ -25,30 +25,34 @@ export default function Register() {
               {' '}
               {/*noValidate thuộc tính này ngăn cho type email validate*/}
               <div className='text-xl'>Đăng Nhập</div>
-              <div className='mt-8'>
-                <input
+              <div>
+                <Input
                   type='email'
                   className='mt-8 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Email'
-                  {...register('email')}
+                  name='email'
+                  register={register}
+                  errorMessage={errors.email?.message}
                 />
-                <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.email?.message}</div>
-                <input
+                <Input
                   type='password'
                   className='mt-2 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Password'
+                  name='password'
+                  register={register}
+                  errorMessage={errors.password?.message}
                   autoComplete='on'
-                  {...register('password')}
                 />
-                <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.password?.message}</div>
-                <input
+                <Input
                   type='password'
                   className='mt-2 w-full border border-gray-200 rounded px-3 py-2'
                   placeholder='Confirm password'
+                  name='confirm_password'
+                  register={register}
                   autoComplete='on'
-                  {...register('confirm_password')}
+                  errorMessage={errors.confirm_password?.message}
                 />
-                <div className='mt-1 text-red-600 min-h-4 text-sm'>{errors.confirm_password?.message}</div>
+
                 <div className='mt-3'>
                   <button
                     type='submit'
