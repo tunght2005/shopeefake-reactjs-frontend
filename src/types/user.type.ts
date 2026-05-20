@@ -1,0 +1,14 @@
+//Chưa các interface về user
+type Role = 'User' | 'Admin'
+
+export type User = {
+  _id: string
+  roles: Role[]
+  email: string
+  name: string
+  date_of_birth: null
+  address: string
+  phone: string
+  createdAt: string
+  updatedAt: string
+}
