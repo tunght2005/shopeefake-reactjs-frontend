@@ -9,6 +9,7 @@ import type { ErrorResponse } from '../../types/utils.type'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/Button'
 
 export default function Login() {
   const { setIsAuthenticated } = useContext(AppContext)
@@ -70,12 +71,14 @@ export default function Login() {
                   autoComplete='on'
                 />
                 <div className='mt-3'>
-                  <button
+                  <Button
                     type='submit'
-                    className='flex w-full items-center justify-center bg-red-500 py-4 px-2 text-sm uppercase text-white hover:bg-red-600'
+                    className='w-full  py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                    isLoading={loginAccountMutation.isPending}
+                    disabled={loginAccountMutation.isPending}
                   >
                     Đăng nhập
-                  </button>
+                  </Button>
                 </div>
               </div>
               <div className='mt-8 flex items-center justify-center'>
