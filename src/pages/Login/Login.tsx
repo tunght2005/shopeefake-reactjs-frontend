@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { type LoginSchema, loginSchema } from '../../utils/rules'
 import Input from '../../components/Input'
 import { useMutation } from '@tanstack/react-query'
-import { loginAccount } from '../../apis/auth.api'
+import authApi from '../../apis/auth.api'
 import type { ErrorResponse } from '../../types/utils.type'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { useContext } from 'react'
@@ -23,7 +23,7 @@ export default function Login() {
   } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) }) // return register, handleSubmit, formState: {errors}
   const loginAccountMutation = useMutation({
     //Tach confirm_password ra khoi data khi gui len server chi kiem tra no khi dang ki
-    mutationFn: (body: LoginSchema) => loginAccount(body)
+    mutationFn: (body: LoginSchema) => authApi.loginAccount(body)
   })
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
@@ -85,7 +85,7 @@ export default function Login() {
               </div>
               <div className='mt-8 flex items-center justify-center'>
                 <span className='text-gray-400'>Bạn chưa có tài khoản?</span>
-                <Link className='ml-1 text-red-400' to='/register'>
+                <Link className='ml-1 text-red-400' to={path.register}>
                   Đăng ký
                 </Link>
               </div>

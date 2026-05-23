@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { schema, type Schema } from '../../utils/rules'
 import Input from '../../components/Input'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from '../../apis/auth.api'
+import authApi from '../../apis/auth.api'
 import { omit } from 'lodash'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import type { ErrorResponse } from '../../types/utils.type'
@@ -26,7 +26,7 @@ export default function Register() {
   } = useForm<FormData>({ resolver: zodResolver(schema) }) // return register, handleSubmit, formState: {errors}
   const registerAccountMutation = useMutation({
     //Tach confirm_password ra khoi data khi gui len server chi kiem tra no khi dang ki
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   })
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
