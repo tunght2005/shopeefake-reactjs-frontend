@@ -29,3 +29,27 @@ export const loginSchema = schema.omit({
 })
 export type LoginSchema = z.infer<typeof loginSchema>
 export type Schema = z.infer<typeof schema>
+
+const priceInput = z
+  .string()
+  .trim()
+  .refine((value) => value === '' || /^\d+$/.test(value), {
+    message: 'Giá không hợp lệ'
+  })
+
+export const priceFilterSchema = z
+  .object({
+    price_min: priceInput,
+    price_max: priceInput
+  })
+  .superRefine((data, ctx) => {
+    if (data.price_min !== '' && data.price_max !== '' && Number(data.price_max) < Number(data.price_min)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Giá không phù hợp',
+        path: ['price_max']
+      })
+    }
+  })
+
+export type PriceFilterSchema = z.infer<typeof priceFilterSchema>
