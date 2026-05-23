@@ -3,12 +3,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import classNames from 'classnames'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import Button from '../Button'
-import InputNumber from '../InputNumber'
-import path from '../../constants/path'
-import { priceFilterSchema, type PriceFilterSchema } from '../../utils/rules'
-import type { Category } from '../../types/category.type'
-import type { QueryConfig } from '../../pages/ProductList/ProductList'
+import Button from '../../../../components/Button'
+import InputNumber from '../../../../components/InputNumber'
+import path from '../../../../constants/path'
+import { priceFilterSchema, type PriceFilterSchema } from '../../../../utils/rules'
+import type { Category } from '../../../../types/category.type'
+import type { QueryConfig } from '../../ProductList'
 import { omitBy, isUndefined, omit } from 'lodash'
 import RatingStars from '../RatingStars'
 interface Props {
@@ -197,7 +197,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
       <div className='bg-gray-300 h-[1px] my-4' />
       <Button
         onClick={handleRemoveAll}
-        className='flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white hover:bg-orange/80'
+        className='flex w-full items-center justify-center bg-orange-600 p-2 text-sm uppercase text-white hover:bg-orange/80'
       >
         Xóa tất cả
       </Button>
