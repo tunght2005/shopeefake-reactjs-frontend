@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import HttpStatusCode from '../constants/httpStatusCode.enum'
+import { isUndefined, omitBy } from 'lodash'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -26,4 +27,10 @@ export function formatNumberToSocialStyle(value: number) {
     .format(value)
     .replace('.', ',')
     .toLowerCase()
+}
+
+export function removeUndefined<T extends Record<string, unknown>>(obj: T) {
+  return omitBy(obj, isUndefined) as {
+    [K in keyof T as T[K] extends undefined ? never : K]: Exclude<T[K], undefined>
+  }
 }

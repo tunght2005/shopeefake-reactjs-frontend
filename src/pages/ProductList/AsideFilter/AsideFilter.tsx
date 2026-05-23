@@ -7,7 +7,6 @@ import Button from '../../../components/Button'
 import InputNumber from '../../../components/InputNumber'
 import path from '../../../constants/path'
 import { priceFilterSchema, type PriceFilterSchema } from '../../../utils/rules'
-import classNames from 'classnames'
 import type { Category } from '../../../types/category.type'
 import type { QueryConfig } from '../ProductList'
 import { omitBy, isUndefined } from 'lodash'
@@ -42,19 +41,19 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
   }, [queryConfig.price_max, queryConfig.price_min, reset])
 
   const onSubmit = handleSubmit((data) => {
+    const query = omitBy(
+      {
+        page: '1',
+        ...queryConfig,
+        price_min: data.price_min || undefined,
+        price_max: data.price_max || undefined
+      },
+      isUndefined
+    )
+
     navigate({
       pathname: path.home,
-      search: createSearchParams(
-        omitBy(
-          {
-            page: '1',
-            ...queryConfig,
-            price_min: data.price_min || undefined,
-            price_max: data.price_max || undefined
-          },
-          isUndefined
-        )
-      ).toString()
+      search: createSearchParams(query as Record<string, string>).toString()
     })
   })
   return (
