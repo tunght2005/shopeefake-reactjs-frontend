@@ -8,6 +8,7 @@ import Profile from './pages/Profile'
 import Register from './pages/Register'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
+import ProductDetail from './pages/ProductDetail'
 
 //Tạo Protect để bảo vệ web khi user biêt domain mà chưa đăng nhập thì những cái như profile, apply k cho phép truy cập
 function ProtectedRoute() {
@@ -57,6 +58,15 @@ export default function useRouteElements() {
           )
         }
       ]
+    },
+    {
+      path: path.productDetail,
+      index: true,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
     },
     {
       path: '',

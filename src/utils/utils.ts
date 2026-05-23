@@ -34,3 +34,5 @@ export function removeUndefined<T extends Record<string, unknown>>(obj: T) {
     [K in keyof T as T[K] extends undefined ? never : K]: Exclude<T[K], undefined>
   }
 }
+
+export const rateSale = (original: number, sale: number) => Math.round(((original - sale) / original) * 100) + '%'
