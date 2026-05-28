@@ -6,10 +6,11 @@ import productApi from '../../apis/product.api'
 import InputNumber from '../../components/InputNumber'
 import ProductRating from '../ProductList/components/ProductRating'
 import type { Product } from '../../types/product.type'
-import { formatCurrency, formatNumberToSocialStyle, rateSale } from '../../utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
 
 export default function ProductDetail() {
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
@@ -24,9 +25,18 @@ export default function ProductDetail() {
     [product, currentIndexImages]
   )
 
+  // useEffect(() => {
+  //   if (product && product.images.length > 0) {
+  //     setActiveImage(product.images[0])
+  //   }
+  // }, [product])
+  // Giữ ảnh hiện tại nếu còn tồn tại sau khi đổi product
   useEffect(() => {
     if (product && product.images.length > 0) {
-      setActiveImage(product.images[0])
+      const raf = requestAnimationFrame(() => {
+        setActiveImage((prev) => (prev && product.images.includes(prev) ? prev : product.images[0]))
+      })
+      return () => cancelAnimationFrame(raf)
     }
   }, [product])
 
