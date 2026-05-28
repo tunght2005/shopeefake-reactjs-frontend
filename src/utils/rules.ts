@@ -30,6 +30,12 @@ export const loginSchema = schema.omit({
 export type LoginSchema = z.infer<typeof loginSchema>
 export type Schema = z.infer<typeof schema>
 
+export const searchSchema = z.object({
+  name: z.string().trim()
+})
+
+export type SearchSchema = z.infer<typeof searchSchema>
+
 const priceInput = z
   .string()
   .trim()
