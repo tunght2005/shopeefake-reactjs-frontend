@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import InputNumber from '../../components/InputNumber'
 import ProductRating from '../ProductList/components/ProductRating'
-import type { Product } from '../../types/product.type'
+import type { Product as ProductType, ProductListConfig } from '../../types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
+import Product from '../ProductList/components/Product'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
@@ -18,6 +19,19 @@ export default function ProductDetail() {
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const product = productDetailData?.data.data
+
+  const queryConfig = useMemo<ProductListConfig>(() => {
+    return product ? { limit: '20', page: '1', category: product.category._id } : { limit: '20', page: '1' }
+  }, [product])
+
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getProducts(queryConfig),
+    staleTime: 3 * 60 * 1000,
+    enabled: Boolean(product)
+  })
+
+  console.log(productsData)
 
   const imageRef = useRef<HTMLImageElement>(null)
   const currentImages = useMemo(
@@ -42,7 +56,7 @@ export default function ProductDetail() {
 
   const next = () => {
     console.log(currentIndexImages[1])
-    if (currentIndexImages[1] < (product as Product).images.length) {
+    if (currentIndexImages[1] < (product as ProductType).images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -239,16 +253,32 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <div className='w-full max-w-7xl mx-auto px-4'>
-        <div className='mt-8 bg-white p-4 shadow'>
-          <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
-          <div className='mx-4 mt-12 mb-4 text-sm leading-loose'>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product.description)
-              }}
-            />
+      <div className='mt-8'>
+        <div className='w-full max-w-7xl mx-auto px-4'>
+          <div className=' bg-white p-4 shadow'>
+            <div className='rounded bg-gray-50 p-4 text-lg capitalize text-slate-700'>Mô tả sản phẩm</div>
+            <div className='mx-4 mt-12 mb-4 text-sm leading-loose'>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product.description)
+                }}
+              />
+            </div>
           </div>
+        </div>
+      </div>
+      <div className='mt-8'>
+        <div className='w-full max-w-7xl mx-auto px-4'>
+          <div className='uppercase text-gray-400'>CÓ THỂ BẠN CŨNG THÍCH</div>
+          {productsData && (
+            <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+              {productsData.data.data.products.map((product) => (
+                <div className='col-span-1' key={product._id}>
+                  <Product product={product} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

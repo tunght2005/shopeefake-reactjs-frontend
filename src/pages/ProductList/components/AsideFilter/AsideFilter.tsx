@@ -8,7 +8,7 @@ import InputNumber from '../../../../components/InputNumber'
 import path from '../../../../constants/path'
 import { priceFilterSchema, type PriceFilterSchema } from '../../../../utils/rules'
 import type { Category } from '../../../../types/category.type'
-import type { QueryConfig } from '../../ProductList'
+import type { QueryConfig } from '../../../../hooks/useQueryConfig'
 import { omitBy, isUndefined, omit } from 'lodash'
 import RatingStars from '../RatingStars'
 interface Props {
